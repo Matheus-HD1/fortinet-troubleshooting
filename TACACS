@@ -1,0 +1,11 @@
+#Debug para tacacs com link satélite, onde o mesmo em alguns casos tem um tempo maior de resposta.
+
+diag deb application authd -1
+diag deb application fnbamd -1
+diag deb en
+
+#configuração para manipular o tempo de reposta.
+
+conf sys global
+set ldapconntimeout 2000
+end
