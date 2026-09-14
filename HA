@@ -1,1 +1,15 @@
-HA RECALCULATE
+TIER 1
+get system status                                            # Informações gerais (modelo, versão, serial, uptime)
+get system performance status                   # CPU e memória do equipamento
+get system ha status                                      # Estado atual do cluster HA
+diagnose sys ha history read                       # Histórico de eventos HA (failover, sync)
+diag sys top 3 50                                            # Top processos (CPU/memória em tempo real)
+diag debug console timestamp enable      # Habilita timestamp nos logs de debug
+diag debug app hasync 255                         # Debug detalhado sincronização HA
+diag debug app hatalk 255                          # Debug comunicação HA entre nós
+diag debug enable                                        # Ativa debug
+ 
+TIER 2
+get system status
+get system performance status
+diag sys top 3 50
