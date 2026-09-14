@@ -1,0 +1,7 @@
+#MANAGER 
+
+manager - 
+policy-> object config -> advanced -> metadada variables (device name e geriploopback)
+
+ 
+Verificar a "target" na policy, em caso de terrestre, adicionar na que foi criada.
