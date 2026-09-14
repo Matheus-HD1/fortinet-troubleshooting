@@ -1,0 +1,6 @@
+#Configuração Roteamento Estático no PE CISCO onde se encontra o Cliente BLD:
+!
+router static
+address-family ipv4 unicast
+<Endereço_IPv4_Loopback_GRC_via_BLD>/32 <Interface_WAN_ID_PE> <Endereço_IPv4_WAN_CPE>
+ 
