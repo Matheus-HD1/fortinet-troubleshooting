@@ -13,3 +13,24 @@ TIER 2
 get system status
 get system performance status
 diag sys top 3 50
+
+
+
+
+
+❤️ DEBUG PORTA HEARTBEAT
+TIER 1
+execute time                           # Validar sincronismo de horário
+get system status
+get system ha status
+diag sys ha heartbeat
+diag sys ha status
+diag sys ha history read
+ 
+TIER 2
+diag sys top 1                         # Executar ~30s
+diagnose sys mpstat 1          # CPU usage (~30s)
+ 
+TIER 3
+diag sniffer packet any 'ether proto 0x8890' 4 0 l
+# Sniffer protocolo HA
