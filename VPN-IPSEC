@@ -1,0 +1,85 @@
+#GERÊNCIA VIA VPN_IPSEC
+
+config system interface
+edit "Loopback_GRC"
+set vdom "root"
+set ip <LOOPBACK 100 GERADA PELA GRC> 255.255.255.255
+set allowaccess ping https ssh http telnet snmp probe-response
+set type loopback
+set description "Loopback_GRC"
+set alias "Loopback_Gerencia"
+next
+end
+ 
+ 
+config vpn ipsec phase1-interface 
+edit "TO-GRC" 
+set interface "wan" 
+set ike-version 2 
+set peertype any 
+set net-device disable 
+set proposal aes256-sha256 aes256-sha1 aes128-sha256 
+set localid <HOSTNAME>
+set dpd on-idle
+set remote-gw 189.3.56.154(GOV) 189.3.255.221(PORT) - ATENTAR-SE PARA O DESTINATIO, SE É GOV OU PORT
+set psksecret ENC dIwnnjNYX3xvE/BFCSOle9c/SvrRamRHeLY52Dn2WSnQzlUWcNv8IIzhoAjF8R3DZ1Imj6/7MS4SK+Lf6mfoXSRZlegh5447hONo5ezNa6YK86yjbbwb/2kv6XvjWCsw/RT7VLLipCMoz6J1V5C8vh8IuN+gS3axBScf8HrCDZsNQ1LCsEEjMZ6MTlNqjql2HJu4Rw==
+next 
+end
+ 
+config vpn ipsec phase2-interface 
+edit "TO-GRC" 
+set phase1name "TO-GRC" 
+set proposal aes256-sha256 aes256-sha1 aes128-sha256 
+set src-subnet <LOOPBACK 100 GERADA PELA GRC> 255.255.255.255
+set dst-subnet 169.248.255.254 255.255.255.255 
+next 
+end
+ 
+config firewall address 
+edit "GER-GRC" 
+set subnet 169.248.255.254 255.255.255.255 
+next 
+edit "Loopback-GRC" 
+set subnet <LOOPBACK 100 GERADA PELA GRC> 255.255.252.0
+next 
+end
+ 
+config router static 
+edit 0
+set dst 169.248.255.254 255.255.255.255 
+set device "TO-GRC" 
+set comment "Gerencia GRC" 
+next 
+edit 0 
+set dst 189.3.56.154 255.255.255.255 
+set device "wan" 
+set comment "Gerencia GRC" 
+set dynamic-gateway enable 
+next 
+end
+ 
+config firewall policy
+edit 0
+set name "GRC-IN"
+set srcintf "TO-GRC"
+set dstintf "Loopback_GRC"
+set action accept
+set srcaddr "GER-GRC"
+set dstaddr "Loopback-GRC"
+set schedule "always"
+set service "ALL"
+set comments GRC-IN
+next
+edit 0
+set name "GRC-OUT"
+set srcintf "Loopback_GRC"
+set dstintf "TO-GRC"
+set action accept
+set srcaddr "Loopback-GRC"
+set dstaddr "GER-GRC"
+set schedule "always"
+set service "ALL"
+set comments GRC-OUT
+next
+end
+end
